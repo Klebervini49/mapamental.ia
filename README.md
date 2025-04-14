@@ -2,7 +2,7 @@
 
 ## Crie mapas mentais interativos com Inteligência Artificial
 
-![MapaMental.IA]([https://via.placeholder.com/1200x600/5B61D9/FFFFFF?text=MapaMental.IA](https://i.ibb.co/SD7mNrcY/LOGO-mapamental-ia.png))
+![MapaMental.IA](https://i.ibb.co/SD7mNrcY/LOGO-mapamental-ia.png)
 
 O **MapaMental.IA** é uma plataforma inovadora que utiliza inteligência artificial para criar mapas mentais a partir de textos, documentos e conversas. Com uma interface intuitiva e recursos avançados de voz, transforme suas ideias em visualizações estruturadas instantaneamente.
 
