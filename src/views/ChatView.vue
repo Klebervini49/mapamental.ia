@@ -6,6 +6,7 @@ import { useRouter } from 'vue-router'
 import { ollamaService } from '../services/ollama'
 import { documentProcessor } from '../services/documentProcessor'
 import { mindMapGenerator } from '../services/mindMapGenerator'
+import { marked } from 'marked'
 import MindMapViewer from '../components/MindMapViewer.vue'
 import MindMapList from '../components/MindMapList.vue'
 import VoiceChat from '../components/VoiceChat.vue'
@@ -38,6 +39,17 @@ const isResponseSpeaking = ref(false)
 const isLoadingVoice = ref(false)
 const transcript = ref('')
 const errorMessage = ref('')
+
+// Função para renderizar markdown nas mensagens do assistente
+function renderMarkdown(text: string): string {
+  if (!text) return ''
+  try {
+    return marked(text, { breaks: true }).toString()
+  } catch (error) {
+    console.error('Erro ao renderizar markdown:', error)
+    return text
+  }
+}
 
 // Verificar autenticação
 onMounted(() => {
@@ -282,10 +294,6 @@ const sendToOllama = async () => {
 
     // Adicionar instrução para responder em português como mensagem de sistema
     const messagesWithLanguage = [
-      {
-        role: 'system',
-        content: 'Você é um assistente útil e sempre responde em português. Se o usuário pedir para gerar um mapa mental, gere um JSON encapsulado entre as tags [JSON-MAPA-MENTAL] e [/JSON-MAPA-MENTAL], mas não mostre esse JSON na resposta visível.'
-      },
       ...messages
     ]
 
@@ -306,7 +314,7 @@ const sendToOllama = async () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'llama3:8b',
+        model: ollamaService.getModel(),
         messages: messagesWithLanguage,
         raw: true,
         stream: true,
@@ -923,7 +931,11 @@ watch(() => {
                   <span class="message-role">{{ message.role === 'user' ? 'Você' : 'MapaMental.IA' }}</span>
                   <span class="message-time">{{ formatTime(message.timestamp) }}</span>
                 </div>
-                <div class="message-text">{{ message.content }}</div>
+                <!-- Renderiza mensagens do usuário normalmente -->
+                <div v-if="message.role === 'user'" class="message-text">{{ message.content }}</div>
+
+                <!-- Renderiza mensagens do assistente com markdown -->
+                <div v-else class="message-text markdown-content" v-html="renderMarkdown(message.content)"></div>
               </div>
             </div>
 
@@ -2132,5 +2144,95 @@ watch(() => {
   100% {
     transform: rotate(360deg);
   }
+}
+
+/* Estilos para Markdown nas mensagens do assistente */
+.markdown-content {
+  font-family: inherit;
+}
+
+.markdown-content :deep(h1) {
+  font-size: 1.5rem;
+  margin: 1.2rem 0 0.8rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.markdown-content :deep(h2) {
+  font-size: 1.3rem;
+  margin: 1rem 0 0.7rem;
+}
+
+.markdown-content :deep(h3) {
+  font-size: 1.15rem;
+  margin: 0.9rem 0 0.6rem;
+}
+
+.markdown-content :deep(p) {
+  margin: 0.5rem 0;
+}
+
+.markdown-content :deep(ul),
+.markdown-content :deep(ol) {
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.markdown-content :deep(li) {
+  margin: 0.25rem 0;
+}
+
+.markdown-content :deep(code) {
+  font-family: monospace;
+  background: rgba(0, 0, 0, 0.05);
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+.markdown-content :deep(pre) {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 0.7rem;
+  border-radius: 5px;
+  overflow-x: auto;
+  margin: 0.7rem 0;
+}
+
+.markdown-content :deep(pre code) {
+  background: transparent;
+  padding: 0;
+}
+
+.markdown-content :deep(blockquote) {
+  border-left: 3px solid var(--secondary-color);
+  padding-left: 1rem;
+  margin: 0.7rem 0;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.markdown-content :deep(a) {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.markdown-content :deep(a:hover) {
+  text-decoration: underline;
+}
+
+.markdown-content :deep(table) {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+.markdown-content :deep(th),
+.markdown-content :deep(td) {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.markdown-content :deep(th) {
+  background-color: rgba(0, 0, 0, 0.05);
 }
 </style>

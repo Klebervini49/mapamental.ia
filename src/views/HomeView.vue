@@ -1,34 +1,74 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import FileUploader from '../components/FileUploader.vue'
-import MindMapViewer from '../components/MindMapViewer.vue'
+import { ref, onMounted, computed } from 'vue'
+import { RouterLink } from 'vue-router'
 
-const isLoading = ref(false)
-const hasMap = ref(false)
-const mindMapData = ref(null)
-const uploaderSection = ref(null)
-const activeTab = ref('upload')
+const activeCategory = ref('todas')
 
-function handleFileProcessed(data: any) {
-  mindMapData.value = data
-  hasMap.value = true
-  isLoading.value = false
-  activeTab.value = 'map'
+function setCategory(category: string) {
+  activeCategory.value = category
 }
 
-function handleProcessStart() {
-  isLoading.value = true
-  hasMap.value = false
-}
+const tools = [
+  {
+    id: 1,
+    name: 'Chat IA',
+    description: 'Converse com nossa IA avançada para obter respostas, ideias e soluções',
+    icon: 'message-circle',
+    category: 'comunicacao',
+    url: '/chat',
+    color: '#5B61D9'
+  },
+  {
+    id: 2,
+    name: 'Transcrição de Áudio',
+    description: 'Transforme áudios em texto com alta precisão e rapidez',
+    icon: 'mic',
+    category: 'audio',
+    url: '/transcricao',
+    color: '#22c55e'
+  },
+  {
+    id: 3,
+    name: 'Mapas Mentais',
+    description: 'Crie mapas mentais a partir de textos e documentos automaticamente',
+    icon: 'git-branch',
+    category: 'visual',
+    url: '/mindmap',
+    color: '#f59e0b'
+  },
+  {
+    id: 4,
+    name: 'Gerador de Imagens',
+    description: 'Crie imagens a partir de descrições textuais com IA generativa',
+    icon: 'image',
+    category: 'visual',
+    url: '/imagens',
+    color: '#EC4899'
+  },
+  {
+    id: 5,
+    name: 'Resumo de Textos',
+    description: 'Resuma longos textos e documentos em poucos parágrafos',
+    icon: 'file-text',
+    category: 'texto',
+    url: '/resumo',
+    color: '#3B82F6'
+  },
+  {
+    id: 6,
+    name: 'Tradução Avançada',
+    description: 'Traduza textos entre dezenas de idiomas com precisão contextual',
+    icon: 'globe',
+    category: 'texto',
+    url: '/traducao',
+    color: '#8B5CF6'
+  }
+]
 
-function scrollToUploader() {
-  uploaderSection.value?.scrollIntoView({ behavior: 'smooth' })
-  activeTab.value = 'upload'
-}
-
-function setTab(tab: string) {
-  activeTab.value = tab
-}
+const filteredTools = computed(() => {
+  if (activeCategory.value === 'todas') return tools
+  return tools.filter(tool => tool.category === activeCategory.value)
+})
 </script>
 
 <template>
@@ -37,121 +77,165 @@ function setTab(tab: string) {
     <section class="hero-section">
       <div class="hero-content">
         <div class="hero-text">
-          <h1>Transforme documentos em <span>mapas mentais</span> com IA</h1>
+          <h1>Seu portal de <span>ferramentas IA</span> em um só lugar</h1>
           <p>
-            Nossa plataforma utiliza inteligência artificial para analisar seus documentos
-            e criar mapas mentais interativos que facilitam a compreensão e organização do conteúdo.
+            Acesse diversas ferramentas de inteligência artificial para facilitar seu trabalho,
+            aumentar sua produtividade e explorar o potencial da IA.
           </p>
           <div class="hero-buttons">
-            <button @click="scrollToUploader" class="primary-button">Começar agora</button>
-            <a href="#como-funciona" class="secondary-button">Saiba mais</a>
+            <a href="#ferramentas" class="primary-button">Explorar ferramentas</a>
+            <RouterLink to="/sobre" class="secondary-button">Saiba mais</RouterLink>
           </div>
         </div>
       </div>
       <div class="hero-features">
         <div class="feature-card">
           <div class="feature-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-              <polyline points="14 2 14 8 20 8"></polyline>
-              <line x1="12" y1="18" x2="12" y2="12"></line>
-              <line x1="9" y1="15" x2="15" y2="15"></line>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <path d="M12 18h.01"></path>
+              <path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path>
+              <path d="M15.9 8.7a4 4 0 0 0-5.657-5.657"></path>
+              <path d="M12 16v-4"></path>
+              <path
+                d="M8.5 8.5c-.964.968-1.5 2.304-1.5 3.664 0 2.767 2.23 5.336 5 5.336s5-2.57 5-5.336c0-1.36-.536-2.696-1.5-3.664-.964-.968-2.39-1.3-3.5-1.3s-2.536.332-3.5 1.3Z">
+              </path>
             </svg>
           </div>
-          <h3>Múltiplos formatos</h3>
-          <p>Suporte para PDF, Word, TXT e mais</p>
+          <h3>IA Avançada</h3>
+          <p>Modelos de IA de última geração</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <path d="M8 3H5a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h3"></path>
+              <path d="M16 3h3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-3"></path>
+              <path d="M12 7v10"></path>
+              <path d="m9 10 3-3 3 3"></path>
+              <path d="m9 14 3 3 3-3"></path>
             </svg>
           </div>
-          <h3>IA avançada</h3>
-          <p>Análise inteligente de conteúdo</p>
+          <h3>Integração</h3>
+          <p>Conecte com seus apps favoritos</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="2" y1="12" x2="22" y2="12"></line>
-              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
             </svg>
           </div>
-          <h3>Compartilhamento</h3>
-          <p>Exporte e compartilhe seus mapas</p>
+          <h3>Atualizações</h3>
+          <p>Novas ferramentas regularmente</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-              <line x1="8" y1="21" x2="16" y2="21"></line>
-              <line x1="12" y1="17" x2="12" y2="21"></line>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
             </svg>
           </div>
-          <h3>Responsivo</h3>
-          <p>Acesse de qualquer dispositivo</p>
+          <h3>Desempenho</h3>
+          <p>Respostas rápidas e precisas</p>
         </div>
       </div>
     </section>
 
-    <!-- How it Works Section -->
-    <section id="como-funciona" class="how-it-works-section">
+    <!-- Tools Section -->
+    <section id="ferramentas" class="tools-section">
       <div class="section-header">
-        <h2>Como funciona</h2>
-        <p>Nossa tecnologia transforma seus documentos em mapas mentais em apenas três passos</p>
+        <h2>Nossas Ferramentas</h2>
+        <p>Explore diversas ferramentas de IA para diferentes necessidades</p>
       </div>
-      <div class="steps-container">
-        <div class="step-card">
-          <div class="step-number">1</div>
-          <div class="step-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+      <div class="tools-categories">
+        <button @click="setCategory('todas')" class="category-button" :class="{ active: activeCategory === 'todas' }">
+          Todas
+        </button>
+        <button @click="setCategory('comunicacao')" class="category-button"
+          :class="{ active: activeCategory === 'comunicacao' }">
+          Comunicação
+        </button>
+        <button @click="setCategory('visual')" class="category-button" :class="{ active: activeCategory === 'visual' }">
+          Visual
+        </button>
+        <button @click="setCategory('texto')" class="category-button" :class="{ active: activeCategory === 'texto' }">
+          Texto
+        </button>
+        <button @click="setCategory('audio')" class="category-button" :class="{ active: activeCategory === 'audio' }">
+          Áudio
+        </button>
+      </div>
+
+      <div class="tools-grid">
+        <RouterLink v-for="tool in filteredTools" :key="tool.id" :to="tool.url" class="tool-card">
+          <div class="tool-icon" :style="{ backgroundColor: `${tool.color}15`, color: tool.color }">
+            <svg v-if="tool.icon === 'message-circle'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2">
+              <path
+                d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
+              </path>
+            </svg>
+            <svg v-if="tool.icon === 'mic'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" y1="19" x2="12" y2="23"></line>
+              <line x1="8" y1="23" x2="16" y2="23"></line>
+            </svg>
+            <svg v-if="tool.icon === 'git-branch'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <line x1="6" y1="3" x2="6" y2="15"></line>
+              <circle cx="18" cy="6" r="3"></circle>
+              <circle cx="6" cy="18" r="3"></circle>
+              <path d="M18 9a9 9 0 0 1-9 9"></path>
+            </svg>
+            <svg v-if="tool.icon === 'image'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+            <svg v-if="tool.icon === 'file-text'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
               <polyline points="14 2 14 8 20 8"></polyline>
-              <line x1="12" y1="18" x2="12" y2="12"></line>
-              <line x1="9" y1="15" x2="15" y2="15"></line>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
             </svg>
-          </div>
-          <h3>Faça upload</h3>
-          <p>Carregue seu documento PDF, Word, TXT ou outros formatos suportados.</p>
-        </div>
-        
-        <div class="step-card">
-          <div class="step-number">2</div>
-          <div class="step-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-              <line x1="3" y1="9" x2="21" y2="9"></line>
-              <line x1="9" y1="21" x2="9" y2="9"></line>
-            </svg>
-          </div>
-          <h3>Processamento IA</h3>
-          <p>Nossa inteligência artificial analisa o conteúdo e organiza as informações.</p>
-        </div>
-        
-        <div class="step-card">
-          <div class="step-number">3</div>
-          <div class="step-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg v-if="tool.icon === 'globe'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
               <circle cx="12" cy="12" r="10"></circle>
               <line x1="2" y1="12" x2="22" y2="12"></line>
-              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+              </path>
             </svg>
           </div>
-          <h3>Visualize e compartilhe</h3>
-          <p>Explore seu mapa mental interativo, exporte e compartilhe com facilidade.</p>
-        </div>
+          <h3>{{ tool.name }}</h3>
+          <p>{{ tool.description }}</p>
+          <div class="tool-action">
+            <span>Acessar</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </div>
+        </RouterLink>
       </div>
     </section>
 
     <!-- CTA Section -->
     <section class="cta-section">
       <div class="cta-content">
-        <h2>Pronto para organizar suas ideias?</h2>
-        <p>Comece agora mesmo a transformar seus documentos em mapas mentais</p>
+        <h2>Pronto para melhorar seu trabalho com IA?</h2>
+        <p>Registre-se gratuitamente e tenha acesso a todas as ferramentas</p>
         <div class="cta-buttons">
-          <button @click="scrollToUploader" class="primary-button">Comece gratuitamente</button>
-          <button class="outline-button">Ver exemplos</button>
+          <RouterLink to="/registrar" class="primary-button">Criar conta grátis</RouterLink>
+          <RouterLink to="/sobre" class="outline-button">Saiba mais</RouterLink>
         </div>
       </div>
     </section>
@@ -166,7 +250,7 @@ function setTab(tab: string) {
 /* Hero Section */
 .hero-section {
   width: 100%;
-  background: linear-gradient(145deg, rgba(109, 40, 217, 0.05) 0%, rgba(34, 197, 94, 0.05) 100%);
+  background: linear-gradient(145deg, rgba(91, 97, 217, 0.05) 0%, rgba(34, 197, 94, 0.05) 100%);
   padding: 6rem 0 2rem;
   overflow: hidden;
   position: relative;
@@ -208,7 +292,7 @@ function setTab(tab: string) {
   left: 0;
   width: 100%;
   height: 8px;
-  background-color: rgba(109, 40, 217, 0.15);
+  background-color: rgba(91, 97, 217, 0.15);
   border-radius: 4px;
   z-index: -1;
 }
@@ -239,6 +323,8 @@ function setTab(tab: string) {
   cursor: pointer;
   transition: var(--transition);
   font-size: 1rem;
+  display: inline-block;
+  text-decoration: none;
 }
 
 .primary-button:hover {
@@ -277,10 +363,12 @@ function setTab(tab: string) {
   cursor: pointer;
   transition: var(--transition);
   font-size: 1rem;
+  text-decoration: none;
+  display: inline-block;
 }
 
 .outline-button:hover {
-  background-color: rgba(109, 40, 217, 0.05);
+  background-color: rgba(91, 97, 217, 0.05);
   transform: translateY(-2px);
   box-shadow: var(--shadow-sm);
 }
@@ -322,7 +410,7 @@ function setTab(tab: string) {
   justify-content: center;
   margin-bottom: 1rem;
   color: var(--primary-color);
-  background-color: rgba(109, 40, 217, 0.1);
+  background-color: rgba(91, 97, 217, 0.1);
   border-radius: 50%;
   padding: 0.75rem;
 }
@@ -338,179 +426,15 @@ function setTab(tab: string) {
   font-size: 0.9rem;
 }
 
-/* App Section */
-.app-section {
-  padding: 5rem 0;
+/* Tools Section */
+.tools-section {
+  padding: 5rem 2rem;
   background-color: var(--background-color);
-}
-
-.app-container {
-  width: 100%;
-  margin: 0 auto;
-  padding: 0 2rem;
-}
-
-.app-tabs {
-  display: flex;
-  background-color: white;
-  border-radius: var(--border-radius) var(--border-radius) 0 0;
-  border: 1px solid var(--border-color);
-  border-bottom: none;
-  overflow: hidden;
-}
-
-.tab-button {
-  padding: 1rem 2rem;
-  background-color: transparent;
-  border: none;
-  border-right: 1px solid var(--border-color);
-  cursor: pointer;
-  font-weight: 500;
-  color: var(--text-light);
-  transition: var(--transition);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.tab-button svg {
-  width: 1.25rem;
-  height: 1.25rem;
-}
-
-.tab-button:last-child {
-  border-right: none;
-}
-
-.tab-button:hover {
-  background-color: rgba(109, 40, 217, 0.05);
-  color: var(--primary-color);
-}
-
-.tab-button.active {
-  background-color: white;
-  color: var(--primary-color);
-  font-weight: 600;
-  position: relative;
-}
-
-.tab-button.active::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background-color: var(--primary-color);
-}
-
-.tab-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.app-content {
-  background-color: white;
-  border-radius: 0 0 var(--border-radius) var(--border-radius);
-  border: 1px solid var(--border-color);
-  min-height: 500px;
-}
-
-.tab-content {
-  padding: 2rem;
-}
-
-.content-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.content-header h2 {
-  font-size: 1.75rem;
-  font-weight: 600;
-  color: var(--text-color);
-  margin-bottom: 0.5rem;
-}
-
-.content-header p {
-  color: var(--text-light);
-}
-
-.processing-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 3rem 0;
-  gap: 1.5rem;
-}
-
-.loader {
-  width: 4rem;
-  height: 4rem;
-  color: var(--primary-color);
-  animation: spin 1s linear infinite;
-}
-
-.loader svg {
-  width: 100%;
-  height: 100%;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.processing-text {
-  color: var(--text-light);
-  font-size: 1.125rem;
-  text-align: center;
-}
-
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 4rem 0;
-  text-align: center;
-}
-
-.empty-state svg {
-  width: 5rem;
-  height: 5rem;
-  color: var(--text-light);
-  opacity: 0.3;
-  margin-bottom: 1.5rem;
-}
-
-.empty-state p {
-  font-size: 1.125rem;
-  color: var(--text-light);
-  margin-bottom: 1.5rem;
-}
-
-.empty-state .sub-text {
-  font-size: 0.95rem;
-  margin-top: -1rem;
-  margin-bottom: 1.5rem;
-  color: var(--text-light);
-  opacity: 0.8;
-}
-
-/* How it Works Section */
-.how-it-works-section {
-  padding: 6rem 0;
-  background-color: var(--background-alt);
 }
 
 .section-header {
   text-align: center;
-  width: 100%;
-  margin: 0 auto 4rem;
-  padding: 0 2rem;
+  margin-bottom: 3rem;
 }
 
 .section-header h2 {
@@ -524,189 +448,167 @@ function setTab(tab: string) {
 .section-header p {
   font-size: 1.125rem;
   color: var(--text-light);
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 800px;
+  max-width: 700px;
+  margin: 0 auto;
 }
 
-.steps-container {
-  width: 100%;
-  margin: 0 auto;
-  padding: 0 2rem;
+.tools-categories {
   display: flex;
   justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.category-button {
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius-sm);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  color: var(--text-light);
+}
+
+.category-button:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.category-button.active {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 2rem;
 }
 
-.step-card {
+.tool-card {
   background-color: white;
   border-radius: var(--border-radius);
-  padding: 2.5rem 2rem;
-  flex: 1;
-  position: relative;
+  box-shadow: var(--shadow-sm);
+  padding: 2rem;
+  border: 1px solid var(--border-color);
+  transition: var(--transition);
+  text-decoration: none;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  transition: var(--transition);
-  border: 1px solid var(--border-color);
-  box-shadow: var(--shadow-md);
 }
 
-.step-card:hover {
-  transform: translateY(-10px);
-  box-shadow: var(--shadow-lg);
+.tool-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
   border-color: var(--primary-light);
 }
 
-.step-number {
-  position: absolute;
-  top: -1.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: var(--primary-color);
-  color: white;
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
+.tool-icon {
+  width: 3.5rem;
+  height: 3.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
-  font-size: 1.25rem;
-  box-shadow: var(--shadow-md);
-}
-
-.step-icon {
-  width: 4rem;
-  height: 4rem;
-  color: var(--primary-color);
+  border-radius: 12px;
   margin-bottom: 1.5rem;
 }
 
-.step-card h3 {
+.tool-icon svg {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.tool-card h3 {
   font-size: 1.25rem;
   font-weight: 600;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   color: var(--text-color);
 }
 
-.step-card p {
+.tool-card p {
   color: var(--text-light);
+  font-size: 0.95rem;
   line-height: 1.6;
-  margin-bottom: 1rem;
+  flex-grow: 1;
+  margin-bottom: 1.5rem;
+}
+
+.tool-action {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary-color);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.tool-action svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  transition: transform 0.3s ease;
+}
+
+.tool-card:hover .tool-action svg {
+  transform: translateX(4px);
 }
 
 /* CTA Section */
 .cta-section {
-  padding: 6rem 0;
-  background: linear-gradient(135deg, rgba(109, 40, 217, 0.9) 0%, rgba(139, 92, 246, 0.9) 100%);
-  color: white;
-  text-align: center;
+  background: linear-gradient(145deg, rgba(91, 97, 217, 0.1) 0%, rgba(34, 197, 94, 0.1) 100%);
+  padding: 5rem 2rem;
+  margin-top: 3rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 4rem;
 }
 
 .cta-content {
-  width: 100%;
+  max-width: 800px;
   margin: 0 auto;
-  padding: 0 2rem;
+  text-align: center;
 }
 
 .cta-content h2 {
   font-size: 2.5rem;
   font-weight: 700;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-color);
   font-family: 'Sora', sans-serif;
 }
 
 .cta-content p {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
+  color: var(--text-light);
   margin-bottom: 2.5rem;
-  opacity: 0.9;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 800px;
 }
 
 .cta-buttons {
   display: flex;
-  justify-content: center;
   gap: 1rem;
-}
-
-.cta-section .primary-button {
-  background-color: white;
-  color: var(--primary-color);
-}
-
-.cta-section .primary-button:hover {
-  background-color: var(--background-color);
-  color: var(--primary-dark);
-}
-
-.cta-section .outline-button {
-  border-color: white;
-  color: white;
-}
-
-.cta-section .outline-button:hover {
-  background-color: rgba(255, 255, 255, 0.15);
-}
-
-/* Responsive */
-@media (max-width: 1024px) {
-  .hero-text h1 {
-    font-size: 2.5rem;
-  }
-  
-  .hero-features {
-    flex-wrap: wrap;
-  }
-  
-  .feature-card {
-    min-width: 45%;
-  }
-  
-  .steps-container {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .step-card {
-    width: 100%;
-  }
+  justify-content: center;
 }
 
 @media (max-width: 768px) {
-  .hero-text h1 {
-    font-size: 2rem;
-  }
-  
   .hero-features {
     flex-direction: column;
   }
-  
-  .feature-card {
-    width: 100%;
+
+  .tools-grid {
+    grid-template-columns: 1fr;
   }
-  
-  .app-tabs {
-    flex-direction: column;
-    border-bottom: 1px solid var(--border-color);
+
+  .hero-text h1 {
+    font-size: 2.5rem;
   }
-  
-  .tab-button {
-    border-right: none;
-    border-bottom: 1px solid var(--border-color);
-  }
-  
-  .tab-button:last-child {
-    border-bottom: none;
-  }
-  
+
   .cta-content h2 {
     font-size: 2rem;
   }
-  
+
+  .hero-buttons,
   .cta-buttons {
     flex-direction: column;
   }

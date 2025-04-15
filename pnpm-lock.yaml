@@ -23,6 +23,9 @@ importers:
       langchain:
         specifier: ^0.3.21
         version: 0.3.21(@langchain/core@0.3.44(openai@4.93.0(ws@8.18.1)(zod@3.24.2)))(axios@1.8.4)(cheerio@1.0.0)(openai@4.93.0(ws@8.18.1)(zod@3.24.2))(ws@8.18.1)
+      marked:
+        specifier: ^15.0.8
+        version: 15.0.8
       markmap:
         specifier: ^0.6.1
         version: 0.6.1
@@ -35,6 +38,9 @@ importers:
       mind-elixir:
         specifier: ^4.5.1
         version: 4.5.1
+      openai:
+        specifier: ^4.24.0
+        version: 4.93.0(ws@8.18.1)(zod@3.24.2)
       pdf-parse:
         specifier: ^1.1.1
         version: 1.1.1
@@ -1959,6 +1965,11 @@ packages:
 
   markdown-it@14.1.0:
     resolution: {integrity: sha512-a54IwgWPaeBCAAsv13YgmALOF1elABB08FxO9i+r4VFk5Vl4pKokRPeX8u5TCgSsPi6ec1otfLjdOpVcgbpshg==}
+    hasBin: true
+
+  marked@15.0.8:
+    resolution: {integrity: sha512-rli4l2LyZqpQuRve5C0rkn6pj3hT8EWPC+zkAxFTAJLxRbENfTAhEQq9itrmf1Y81QtAX5D/MYlGlIomNgj9lA==}
+    engines: {node: '>= 18'}
     hasBin: true
 
   markmap-common@0.18.9:
@@ -4143,6 +4154,8 @@ snapshots:
       mdurl: 2.0.0
       punycode.js: 2.3.1
       uc.micro: 2.1.0
+
+  marked@15.0.8: {}
 
   markmap-common@0.18.9:
     dependencies:

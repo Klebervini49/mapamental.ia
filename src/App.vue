@@ -27,33 +27,35 @@ const handleLogout = () => {
           <div class="logo-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="5"></circle>
-              <line x1="12" y1="1" x2="12" y2="3"></line>
-              <line x1="12" y1="21" x2="12" y2="23"></line>
-              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-              <line x1="1" y1="12" x2="3" y2="12"></line>
-              <line x1="21" y1="12" x2="23" y2="12"></line>
-              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+              <path d="M12 2a10 10 0 1 0 0 20 10 10 0 1 0 0-20z"></path>
+              <path d="M12 8v4"></path>
+              <path d="M12 16h.01"></path>
+              <path d="M4.93 4.93l4.24 4.24"></path>
+              <path d="M14.83 14.83l4.24 4.24"></path>
+              <path d="M14.83 9.17l4.24-4.24"></path>
+              <circle cx="12" cy="12" r="4" stroke="#22c55e" fill="none"></circle>
             </svg>
           </div>
-          <h1>Mapa<span>Mental</span>.IA</h1>
+          <h1>IA<span>Tools</span></h1>
         </div>
 
         <nav>
           <RouterLink to="/" class="nav-link">Início</RouterLink>
-          <RouterLink to="/sobre" class="nav-link">Sobre</RouterLink>
-          
+          <RouterLink to="/sobre" class="nav-link">Ferramentas</RouterLink>
+
           <!-- Menu para usuários não autenticados -->
           <template v-if="!isLoggedIn">
+            <RouterLink to="/transcricao" class="nav-link">Transcrição</RouterLink>
+            <RouterLink to="/chat" class="nav-link">Chat IA</RouterLink>
             <RouterLink to="/login" class="auth-button">Entrar</RouterLink>
           </template>
-          
+
           <!-- Menu para usuários autenticados -->
           <template v-else>
             <div class="user-menu">
-              <RouterLink to="/chat" class="nav-link">Chat</RouterLink>
+              <RouterLink to="/chat" class="nav-link">Chat IA</RouterLink>
+              <RouterLink to="/transcricao" class="nav-link">Transcrição</RouterLink>
+              <RouterLink to="/mindmap" class="nav-link">Mapas Mentais</RouterLink>
               <RouterLink to="/perfil" class="nav-link">Meu Perfil</RouterLink>
               <button @click="handleLogout" class="logout-nav-button">Sair</button>
             </div>
@@ -70,15 +72,15 @@ const handleLogout = () => {
       <div class="footer-container">
         <div class="footer-content">
           <div class="footer-logo">
-            <h2>Mapa<span>Mental</span>.IA</h2>
-            <p>Transformando conhecimento em visualizações inteligentes</p>
+            <h2>IA<span>Tools</span></h2>
+            <p>Seu portal de ferramentas de inteligência artificial</p>
           </div>
           <div class="footer-links">
             <div class="footer-column">
-              <h3>Produto</h3>
-              <a href="#">Recursos</a>
-              <a href="#">Preços</a>
-              <a href="#">FAQ</a>
+              <h3>Ferramentas</h3>
+              <a href="/chat">Chat IA</a>
+              <a href="/transcricao">Transcrição</a>
+              <a href="/mindmap">Mapas Mentais</a>
             </div>
             <div class="footer-column">
               <h3>Empresa</h3>
@@ -94,7 +96,7 @@ const handleLogout = () => {
           </div>
         </div>
         <div class="footer-bottom">
-          <p>&copy; {{ new Date().getFullYear() }} MapaMental.IA - Todos os direitos reservados</p>
+          <p>&copy; {{ new Date().getFullYear() }} IATools - Todos os direitos reservados</p>
         </div>
       </div>
     </footer>
@@ -136,7 +138,7 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
   line-height: 1.6;
-  background-image: 
+  background-image:
     radial-gradient(at 50% 0%, rgba(91, 97, 217, 0.05) 0px, transparent 50%),
     radial-gradient(at 90% 90%, rgba(34, 197, 94, 0.05) 0px, transparent 50%);
   background-attachment: fixed;
@@ -369,20 +371,20 @@ footer {
   .header-container {
     padding: 1rem;
   }
-  
+
   nav {
     gap: 0.75rem;
   }
-  
+
   .nav-link {
     padding: 0.5rem;
   }
-  
+
   .footer-content {
     flex-direction: column;
     gap: 2rem;
   }
-  
+
   .footer-links {
     flex-direction: column;
     gap: 2rem;
@@ -391,26 +393,34 @@ footer {
 
 /* Estilizando o scrollbar para WebKit (Chrome, Safari) */
 ::-webkit-scrollbar {
-  width: 12px; /* Largura do scrollbar */
+  width: 12px;
+  /* Largura do scrollbar */
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--background-alt); /* Cor do fundo do scrollbar */
-  border-radius: 6px; /* Bordas arredondadas */
+  background: var(--background-alt);
+  /* Cor do fundo do scrollbar */
+  border-radius: 6px;
+  /* Bordas arredondadas */
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--primary-color); /* Cor do "thumb" do scrollbar */
-  border-radius: 6px; /* Bordas arredondadas */
+  background: var(--primary-color);
+  /* Cor do "thumb" do scrollbar */
+  border-radius: 6px;
+  /* Bordas arredondadas */
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-dark); /* Cor do "thumb" ao passar o mouse */
+  background: var(--primary-dark);
+  /* Cor do "thumb" ao passar o mouse */
 }
 
 /* Estilizando o scrollbar para Firefox */
 * {
-  scrollbar-width: thin; /* Largura do scrollbar */
-  scrollbar-color: var(--primary-color) var(--background-alt); /* Cor do "thumb" e do fundo */
+  scrollbar-width: thin;
+  /* Largura do scrollbar */
+  scrollbar-color: var(--primary-color) var(--background-alt);
+  /* Cor do "thumb" e do fundo */
 }
 </style>

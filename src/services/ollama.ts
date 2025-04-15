@@ -27,7 +27,7 @@ interface OllamaResponse {
  * Configurações padrão para a API Ollama
  */
 const OLLAMA_API_URL = 'http://localhost:11434/api/chat'
-const MODEL = 'llama3.3:latest'
+const MODEL = 'llama3'
 
 /**
  * Classe para gerenciar a comunicação com a API Ollama
